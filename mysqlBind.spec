@@ -1,19 +1,19 @@
 Summary:	An ISP quality, browser-based DNS/BIND name server manager
-Summary(pl):	Oparty na przegl±darce zarz±dca serwerów DNS/BIND wystarczaj±cy dla ISP
+Summary(pl):	Oparty na przegl±darce rozbudowany zarz±dca serwerów DNS/BIND
 Name:		mysqlBind
 Version:	1.8
-Release:	0.6
+Release:	0.9
 License:	GPL v2
 Group:		Networking/Admin
 Source0:	http://openisp.net/%{name}/%{name}%{version}.tar.gz
 # Source0-md5:	1b360bdc74bf4d21998256fa09d45af7
 Source1:	%{name}.conf
 Patch0:		%{name}-makefile.patch
-Patch1:		%{name}-mysql_user.patch
-Patch2:		%{name}-paths.patch
+Patch1:		%{name}-paths.patch
 URL:		http://openisp.net/mysqlBind/
 BuildRequires:	mysql-devel
 Requires:	apache-mod_ssl
+Requires:	bind
 Requires:	bind-utils
 Requires:	mysql
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -52,26 +52,35 @@ logowanie has³em po SSL, certyfikat osobisty SSL lub dostêp oparty o
 IP z wieloma stopniami uprawnieñ i indywidualn± w³asno¶ci± rekordów.
 Jest tak¿e kompatybilny z mysqlISP.
 
-
 %prep
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
+echo '
+#define LIBDIR "/usr/lib"
+#define NAMED_CONF "/var/lib/named/etc"
+' >> local.h
+
 %{__make} \
 	CFLAGS="-Wall -DLinux %{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/httpd,%{_appdir},/var/lib/%{name}/data}
+install -d $RPM_BUILD_ROOT{/etc/httpd,%{_appdir}/{data,setup9}} \
 
 %{__make} install \
 	CGIDIR=$RPM_BUILD_ROOT%{_appdir}/
 
-install data/* $RPM_BUILD_ROOT/var/lib/%{name}/data
+install data/* $RPM_BUILD_ROOT%{_appdir}/data
+install setup9/* $RPM_BUILD_ROOT%{_appdir}/setup9
 install docs/tutorial.html $RPM_BUILD_ROOT%{_appdir}/mysqlbind.tutorial.txt
+
+for i in `seq 0 9` a b c d e f g h i j k l m n o p q r s t u v w x y z; do
+	install -d $RPM_BUILD_ROOT/var/lib/named/etc/named.d/master/$i
+	install -d $RPM_BUILD_ROOT/var/lib/named/etc/named.d/slave/$i
+done
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd
 
@@ -104,5 +113,6 @@ fi
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/*.cgi
 %{_appdir}/*.txt
-%dir /var/lib/%{name}
-/var/lib/%{name}/data
+%{_appdir}/data
+%{_appdir}/setup9
+/var/lib/named/etc/named.d
