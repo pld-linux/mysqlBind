@@ -1,148 +1,24 @@
-diff -ruN mysqlBind.orig/bind.c mysqlBind/bind.c
---- mysqlBind.orig/bind.c	2003-12-22 17:27:39.000000000 +0100
-+++ mysqlBind/bind.c	2004-02-27 23:38:55.000000000 +0100
-@@ -545,15 +545,15 @@
- 	Header_ism3("Import()",0);
- 	printf("</center><font size=2><blockquote>\n");
- 
--	printf("Importing master zones from /usr/local/mysqlbind/import directory. File name must be same as zone name. Only A, CNAME, MX, PTR and NS records supported. SOA ttl values must be seconds. SOA NS must be in tNameServer.\n");
-+	printf("Importing master zones from /var/lib/mysqlBind/import directory. File name must be same as zone name. Only A, CNAME, MX, PTR and NS records supported. SOA ttl values must be seconds. SOA NS must be in tNameServer.\n");
- 
- 	printf("<pre>\n");
- 		
--	n=scandir("/usr/local/mysqlbind/import", &namelist, 0, 0);
-+	n=scandir("/var/lib/mysqlBind/import", &namelist, 0, 0);
- 			
- 	if(n<0)
- 	{
--		printf("scandir() error: Does /usr/local/mysqlbind/import exist?\n");
-+		printf("scandir() error: Does /var/lib/mysqlBind/import exist?\n");
- 		Footer_ism3();
- 	}
- 	else if(n==2)
-@@ -574,7 +574,7 @@
- 	{
- 		FILE *fp;
- 
--		sprintf(query,"/usr/local/mysqlbind/import/%.100s", namelist[i]->d_name);
-+		sprintf(query,"/var/lib/mysqlBind/import/%.100s", namelist[i]->d_name);
- 		if(!(fp=fopen(query,"r")))
- 		{
- 			printf("Could not open: %s\n",query);
-@@ -927,7 +927,7 @@
- 			strcpy(query,"a");
- 		else
- 			strcpy(query,"w");
--		if(!(sfp=fopen("/usr/local/mysqlbind/named.d/master.zones",query)))
-+		if(!(sfp=fopen("/var/lib/mysqlBind/named.d/master.zones",query)))
- 		{
- 			fprintf(stderr,"Could not open master.zones\n");
- 			exit(1);
-@@ -955,7 +955,7 @@
- 		char *cp;
- 
- 		//write master db file
--		sprintf(query,"/usr/local/mysqlbind/named.d/master/%c/%s",field[0][0],field[0]);
-+		sprintf(query,"/var/lib/mysqlBind/named.d/master/%c/%s",field[0][0],field[0]);
- 		if(!(zfp=fopen(query,"w")))
- 		{
- 			fprintf(stderr,"Could not open master zone db file\n");
-@@ -1076,7 +1076,7 @@
- 		strcpy(query,"a");
- 	else
- 		strcpy(query,"w");
--	if(!(fp=fopen("/usr/local/mysqlbind/named.d/slave.zones",query)))
-+	if(!(fp=fopen("/var/lib/mysqlBind/named.d/slave.zones",query)))
- 	{
- 		fprintf(stderr,"Could not open slave.zones\n");
- 		exit(1);
-@@ -1124,50 +1124,50 @@
- 	printf("Installing named for IP %s from %s/mysqlBind\n",
- 			IPNumber(cIpNum), cISMROOT);
- 	
--	mkdir("/usr/local/mysqlbind",0777);
--	mkdir("/usr/local/mysqlbind/named.d",0777);
--	mkdir("/usr/local/mysqlbind/named.d/master",0777);
--	mkdir("/usr/local/mysqlbind/named.d/slave",0777);
-+	mkdir("/var/lib/mysqlBind",0777);
-+	mkdir("/var/lib/mysqlBind/named.d",0777);
-+	mkdir("/var/lib/mysqlBind/named.d/master",0777);
-+	mkdir("/var/lib/mysqlBind/named.d/slave",0777);
- 
- 	printf("Configuring and installing files...\n");
- 
- 	//Create dir hierarchy	
- 	for(i='0';i<='9';i++)
- 	{
--		sprintf(query,"/usr/local/mysqlbind/named.d/master/%c",i);
-+		sprintf(query,"/var/lib/mysqlBind/named.d/master/%c",i);
- 		mkdir(query,0777);
--		sprintf(query,"/usr/local/mysqlbind/named.d/slave/%c",i);
-+		sprintf(query,"/var/lib/mysqlBind/named.d/slave/%c",i);
- 		mkdir(query,0777);
- 	}
- 	for(i='a';i<='z';i++)
- 	{
--		sprintf(query,"/usr/local/mysqlbind/named.d/master/%c",i);
-+		sprintf(query,"/var/lib/mysqlBind/named.d/master/%c",i);
- 		mkdir(query,0777);
--		sprintf(query,"/usr/local/mysqlbind/named.d/slave/%c",i);
-+		sprintf(query,"/var/lib/mysqlBind/named.d/slave/%c",i);
- 		mkdir(query,0777);
- 	}
- 
--	sprintf(query,"cat %s/mysqlBind/%s/named.conf|sed -e \"s/{{cIpNumber}}/%s/g\" > /usr/local/mysqlbind/named.conf",cISMROOT,cSetupDir,IPNumber(cIpNum));	
-+	sprintf(query,"cat %s/mysqlBind/%s/named.conf|sed -e \"s/{{cIpNumber}}/%s/g\" > /var/lib/mysqlBind/named.conf",cISMROOT,cSetupDir,IPNumber(cIpNum));	
- 	if(system(query))
- 		 printf("Error configuring named.conf\n");
- 
--	sprintf(query,"touch /usr/local/mysqlbind/named.d/master.zones");	
-+	sprintf(query,"touch /var/lib/mysqlBind/named.d/master.zones");	
- 	if(system(query))
- 		 printf("Error configuring master.zones\n");
- 
--	sprintf(query,"touch /usr/local/mysqlbind/named.d/slave.zones");	
-+	sprintf(query,"touch /var/lib/mysqlBind/named.d/slave.zones");	
- 	if(system(query))
- 		 printf("Error configuring slave.zones\n");
- 
--	sprintf(query,"cat %s/mysqlBind/%s/localhost > /usr/local/mysqlbind/named.d/master/localhost",cISMROOT,cSetupDir);	
-+	sprintf(query,"cat %s/mysqlBind/%s/localhost > /var/lib/mysqlBind/named.d/master/localhost",cISMROOT,cSetupDir);	
- 	if(system(query))
- 		 printf("Error configuring localhost\n");
- 
--	sprintf(query,"cat %s/mysqlBind/%s/127.0.0 > /usr/local/mysqlbind/named.d/master/127.0.0",cISMROOT,cSetupDir);	
-+	sprintf(query,"cat %s/mysqlBind/%s/127.0.0 > /var/lib/mysqlBind/named.d/master/127.0.0",cISMROOT,cSetupDir);	
- 	if(system(query))
- 		 printf("Error configuring 127.0.0\n");
- 
--	sprintf(query,"cat %s/mysqlBind/%s/root.cache > /usr/local/mysqlbind/named.d/root.cache",cISMROOT,cSetupDir);	
-+	sprintf(query,"cat %s/mysqlBind/%s/root.cache > /var/lib/mysqlBind/named.d/root.cache",cISMROOT,cSetupDir);	
- 	if(system(query))
- 		 printf("Error configuring root.cache\n");
- 
-@@ -1557,7 +1557,7 @@
- 		//debug only
- 		printf("Modify\n\n");
- 		//Single zone, DBFiles yes, Stubs no
--		sprintf(query,"grep 'zone \"%s\"' /usr/local/mysqlbind/named.d/master.zones > /dev/null",cZone);
-+		sprintf(query,"grep 'zone \"%s\"' /var/lib/mysqlBind/named.d/master.zones > /dev/null",cZone);
- 		if(system(query))
- 		{
- 			CreateMasterFiles(cMasterNS,"",1,1);
 diff -ruN mysqlBind.orig/mainfunc.h mysqlBind/mainfunc.h
---- mysqlBind.orig/mainfunc.h	2004-02-27 22:36:39.000000000 +0100
-+++ mysqlBind/mainfunc.h	2004-02-27 23:30:11.000000000 +0100
-@@ -220,7 +220,7 @@
+--- mysqlBind.orig/mainfunc.h	2004-02-04 22:50:46.000000000 +0100
++++ mysqlBind/mainfunc.h	2004-03-01 13:36:38.000000000 +0100
+@@ -9,6 +9,7 @@
+  
+ */
+ 
++#include "local.h"
+ 
+ static char cTableList[32][32]=\
+ {"tZone","tResource","tRRType","tJob","tNameServer","tMailServer","tClient","tAuthorize","tConfiguration",""};
+@@ -220,7 +221,7 @@
  {
  	Header_ism3("NamedConf()",0);
  	printf("</center><pre><blockquote>");
 -	PassDirectHtml("/usr/local/mysqlbind/named.conf");
-+	PassDirectHtml("/var/lib/mysqlBind/named.conf");
++	PassDirectHtml(NAMED_CONF "/named.conf");
  	printf("</blockquote></pre>");
  	Footer_ism3();
  }//void NamedConf(void)
-@@ -263,12 +263,8 @@
+@@ -263,12 +264,8 @@
  		strncpy(cISMROOT,getenv("ISMROOT"),255);
  		cHost[255]=0;
  	}
@@ -153,11 +29,11 @@ diff -ruN mysqlBind.orig/mainfunc.h mysqlBind/mainfunc.h
 -	exit(1);
 -	}
 +	else
-+		sprintf(cISMROOT,"/var/lib");
++		sprintf(cISMROOT,LIBDIR);
  
  	printf("Restoring mysqlBind data from .txt file in %s/{{cProject}}/data...\n\n",cISMROOT);
  
-@@ -309,12 +305,8 @@
+@@ -309,12 +306,8 @@
  		strncpy(cISMROOT,getenv("ISMROOT"),255);
  		cHost[255]=0;
  	}
@@ -168,11 +44,11 @@ diff -ruN mysqlBind.orig/mainfunc.h mysqlBind/mainfunc.h
 -	exit(1);
 -	}
 +	else
-+		sprintf(cISMROOT,"/var/lib");
++		sprintf(cISMROOT,LIBDIR);
  
  	printf("Restoring mysqlBind data from .txt file in %s/{{cProject}}/data...\n\n",cISMROOT);
  
-@@ -351,12 +343,8 @@
+@@ -351,12 +344,8 @@
  		strncpy(cISMROOT,getenv("ISMROOT"),255);
  		cHost[255]=0;
  	}
@@ -183,11 +59,11 @@ diff -ruN mysqlBind.orig/mainfunc.h mysqlBind/mainfunc.h
 -	exit(1);
 -	}
 +	else
-+		sprintf(cISMROOT,"/var/lib");
++		sprintf(cISMROOT,LIBDIR);
  
  	printf("Backing up mysqlBind data to .txt files in \
  %s/mysqlBind/data...\n\n",cISMROOT);
-@@ -407,24 +395,16 @@
+@@ -407,24 +396,8 @@
  		strncpy(cISMROOT,getenv("ISMROOT"),255);
  		cISMROOT[255]=0;
  	}
@@ -197,14 +73,12 @@ diff -ruN mysqlBind.orig/mainfunc.h mysqlBind/mainfunc.h
 -		printf("You must set ISMROOT env var first. Ex. (csh) setenv ISMROOT /home/joe\n");
 -		exit(1);
 -	}
-+	else
-+		sprintf(cISMROOT,"/var/lib");
- 
- 	if(getenv("CGIDIR")!=NULL)
- 	{
- 		strncpy(cCGIDIR,getenv("CGIDIR"),255);
- 		cCGIDIR[255]=0;
- 	}
+-
+-	if(getenv("CGIDIR")!=NULL)
+-	{
+-		strncpy(cCGIDIR,getenv("CGIDIR"),255);
+-		cCGIDIR[255]=0;
+-	}
 -
 -	if(!cCGIDIR[0])
 -	{
@@ -212,7 +86,157 @@ diff -ruN mysqlBind.orig/mainfunc.h mysqlBind/mainfunc.h
 -		exit(1);
 -	}
 +	else
-+		sprintf(cCGIDIR,"/usr/lib/mysqlBind");
++		sprintf(cISMROOT,LIBDIR);
  
  	printf("Creating db and setting permissions, installing data from %s/mysqlBind...\n\n",cISMROOT);
  
+@@ -530,9 +503,6 @@
+                 }
+         }
+ 
+-        sprintf(query,"cp $ISMROOT/mysqlBind/docs/tutorial.html $CGIDIR/mysqlbind.tutorial.txt");
+-	system(query);
+-
+         printf("Done\n");
+ 	exit(0);
+ 
+@@ -542,6 +512,7 @@
+ void mySQLRootConnect(char *cPasswd)
+ {
+         mysql_init(&mysql);
++        if (!mysql_real_connect(&mysql,NULL,"mysql",cPasswd,"mysql",0,NULL,0))
+         if (!mysql_real_connect(&mysql,NULL,"root",cPasswd,"mysql",0,NULL,0))
+         {
+                 printf("Database server unavailable\n");
+diff -ruN mysqlBind.orig/bind.c mysqlBind/bind.c
+--- mysqlBind.orig/bind.c	2003-12-22 17:27:39.000000000 +0100
++++ mysqlBind/bind.c	2004-03-01 13:54:00.000000000 +0100
+@@ -22,6 +22,7 @@
+ */
+ 
+ #include "mysqlrad.h"
++#include "local.h"
+ 
+ 
+ void PassDirectHtml(char *file);
+@@ -545,15 +546,15 @@
+ 	Header_ism3("Import()",0);
+ 	printf("</center><font size=2><blockquote>\n");
+ 
+-	printf("Importing master zones from /usr/local/mysqlbind/import directory. File name must be same as zone name. Only A, CNAME, MX, PTR and NS records supported. SOA ttl values must be seconds. SOA NS must be in tNameServer.\n");
++	printf("Importing master zones from " NAMED_CONF "/import directory. File name must be same as zone name. Only A, CNAME, MX, PTR and NS records supported. SOA ttl values must be seconds. SOA NS must be in tNameServer.\n");
+ 
+ 	printf("<pre>\n");
+ 		
+-	n=scandir("/usr/local/mysqlbind/import", &namelist, 0, 0);
++	n=scandir(NAMED_CONF "/import", &namelist, 0, 0);
+ 			
+ 	if(n<0)
+ 	{
+-		printf("scandir() error: Does /usr/local/mysqlbind/import exist?\n");
++		printf("scandir() error: Does " NAMEN_CONF "/import exist?\n");
+ 		Footer_ism3();
+ 	}
+ 	else if(n==2)
+@@ -574,7 +575,7 @@
+ 	{
+ 		FILE *fp;
+ 
+-		sprintf(query,"/usr/local/mysqlbind/import/%.100s", namelist[i]->d_name);
++		sprintf(query,NAMED_CONF "/import/%.100s", namelist[i]->d_name);
+ 		if(!(fp=fopen(query,"r")))
+ 		{
+ 			printf("Could not open: %s\n",query);
+@@ -927,7 +928,7 @@
+ 			strcpy(query,"a");
+ 		else
+ 			strcpy(query,"w");
+-		if(!(sfp=fopen("/usr/local/mysqlbind/named.d/master.zones",query)))
++		if(!(sfp=fopen(NAMED_CONF "/named.d/master.zones",query)))
+ 		{
+ 			fprintf(stderr,"Could not open master.zones\n");
+ 			exit(1);
+@@ -955,7 +956,7 @@
+ 		char *cp;
+ 
+ 		//write master db file
+-		sprintf(query,"/usr/local/mysqlbind/named.d/master/%c/%s",field[0][0],field[0]);
++		sprintf(query,NAMED_CONF "/named.d/master/%c/%s",field[0][0],field[0]);
+ 		if(!(zfp=fopen(query,"w")))
+ 		{
+ 			fprintf(stderr,"Could not open master zone db file\n");
+@@ -1076,7 +1077,7 @@
+ 		strcpy(query,"a");
+ 	else
+ 		strcpy(query,"w");
+-	if(!(fp=fopen("/usr/local/mysqlbind/named.d/slave.zones",query)))
++	if(!(fp=fopen(NAMED_CONF "/named.d/slave.zones",query)))
+ 	{
+ 		fprintf(stderr,"Could not open slave.zones\n");
+ 		exit(1);
+@@ -1124,50 +1125,29 @@
+ 	printf("Installing named for IP %s from %s/mysqlBind\n",
+ 			IPNumber(cIpNum), cISMROOT);
+ 	
+-	mkdir("/usr/local/mysqlbind",0777);
+-	mkdir("/usr/local/mysqlbind/named.d",0777);
+-	mkdir("/usr/local/mysqlbind/named.d/master",0777);
+-	mkdir("/usr/local/mysqlbind/named.d/slave",0777);
+-
+ 	printf("Configuring and installing files...\n");
+ 
+-	//Create dir hierarchy	
+-	for(i='0';i<='9';i++)
+-	{
+-		sprintf(query,"/usr/local/mysqlbind/named.d/master/%c",i);
+-		mkdir(query,0777);
+-		sprintf(query,"/usr/local/mysqlbind/named.d/slave/%c",i);
+-		mkdir(query,0777);
+-	}
+-	for(i='a';i<='z';i++)
+-	{
+-		sprintf(query,"/usr/local/mysqlbind/named.d/master/%c",i);
+-		mkdir(query,0777);
+-		sprintf(query,"/usr/local/mysqlbind/named.d/slave/%c",i);
+-		mkdir(query,0777);
+-	}
+-
+-	sprintf(query,"cat %s/mysqlBind/%s/named.conf|sed -e \"s/{{cIpNumber}}/%s/g\" > /usr/local/mysqlbind/named.conf",cISMROOT,cSetupDir,IPNumber(cIpNum));	
++	sprintf(query,"cat %s/mysqlBind/%s/named.conf|sed -e \"s/{{cIpNumber}}/%s/g\" > " NAMED_CONF "/named.conf",cISMROOT,cSetupDir,IPNumber(cIpNum));	
+ 	if(system(query))
+ 		 printf("Error configuring named.conf\n");
+ 
+-	sprintf(query,"touch /usr/local/mysqlbind/named.d/master.zones");	
++	sprintf(query,"touch " NAMED_CONF "/named.d/master.zones");	
+ 	if(system(query))
+ 		 printf("Error configuring master.zones\n");
+ 
+-	sprintf(query,"touch /usr/local/mysqlbind/named.d/slave.zones");	
++	sprintf(query,"touch " NAMED_CONF "/named.d/slave.zones");	
+ 	if(system(query))
+ 		 printf("Error configuring slave.zones\n");
+ 
+-	sprintf(query,"cat %s/mysqlBind/%s/localhost > /usr/local/mysqlbind/named.d/master/localhost",cISMROOT,cSetupDir);	
++	sprintf(query,"cat %s/mysqlBind/%s/localhost > " NAMED_CONF "/named.d/master/localhost",cISMROOT,cSetupDir);	
+ 	if(system(query))
+ 		 printf("Error configuring localhost\n");
+ 
+-	sprintf(query,"cat %s/mysqlBind/%s/127.0.0 > /usr/local/mysqlbind/named.d/master/127.0.0",cISMROOT,cSetupDir);	
++	sprintf(query,"cat %s/mysqlBind/%s/127.0.0 > " NAMED_CONF "/named.d/master/127.0.0",cISMROOT,cSetupDir);	
+ 	if(system(query))
+ 		 printf("Error configuring 127.0.0\n");
+ 
+-	sprintf(query,"cat %s/mysqlBind/%s/root.cache > /usr/local/mysqlbind/named.d/root.cache",cISMROOT,cSetupDir);	
++	sprintf(query,"cat %s/mysqlBind/%s/root.cache > " NAMED_CONF "/named.d/root.cache",cISMROOT,cSetupDir);	
+ 	if(system(query))
+ 		 printf("Error configuring root.cache\n");
+ 
+@@ -1557,7 +1537,7 @@
+ 		//debug only
+ 		printf("Modify\n\n");
+ 		//Single zone, DBFiles yes, Stubs no
+-		sprintf(query,"grep 'zone \"%s\"' /usr/local/mysqlbind/named.d/master.zones > /dev/null",cZone);
++		sprintf(query,"grep 'zone \"%s\"' " NAMED_CONF "/named.d/master.zones > /dev/null",cZone);
+ 		if(system(query))
+ 		{
+ 			CreateMasterFiles(cMasterNS,"",1,1);
