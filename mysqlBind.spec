@@ -3,9 +3,10 @@ Name:		mysqlBind
 Version:	1.8
 Release:	0.5
 License:	GPL v2
-Group:		-
+Group:		Networking/Admin
 Source0:	http://openisp.net/%{name}/%{name}%{version}.tar.gz
 # Source0-md5:	1b360bdc74bf4d21998256fa09d45af7
+Source1:	%{name}.conf
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-mysql_user.patch
 URL:		http://openisp.net/mysqlBind/
@@ -15,9 +16,7 @@ BuildRequires:	mysql-devel
 #Requires(preun):	-
 #Requires(postun):	-
 Requires:	mysql
-#Provides:	-
-#Obsoletes:	-
-#Conflicts:	-
+Requires:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_appdir %{_libdir}/%{name}
@@ -48,13 +47,15 @@ ownership. It is also compatible with mysqlISP.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_appdir},/var/lib/%{name}/{data,docs}}
+install -d $RPM_BUILD_ROOT{%{_appdir}/data,/etc/httpd}
 
 %{__make} install \
 	CGIDIR=$RPM_BUILD_ROOT%{_appdir}/
 
-install data/* $RPM_BUILD_ROOT/var/lib/%{name}/data
-install docs/* $RPM_BUILD_ROOT/var/lib/%{name}/docs
+install data/* $RPM_BUILD_ROOT%{_appdir}/data
+install docs/tutorial.html $RPM_BUILD_ROOT%{_appdir}/mysqlbind.tutorial.txt
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -70,6 +71,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc CHANGES INSTALL
+%config(noreplace) %verify(not md5 size mtime) /etc/httpd/%{name}.conf
 %dir %{_appdir}
-%attr(755,root,root) %{_appdir}/*
-/var/lib/%{name}
+%attr(755,root,root) %{_appdir}/*.cgi
+%{_appdir}/*.txt
+%{_appdir}/data
