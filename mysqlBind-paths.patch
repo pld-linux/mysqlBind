@@ -134,7 +134,7 @@ diff -ruN mysqlBind.orig/bind.c mysqlBind/bind.c
  	if(n<0)
  	{
 -		printf("scandir() error: Does /usr/local/mysqlbind/import exist?\n");
-+		printf("scandir() error: Does " NAMEN_CONF "/import exist?\n");
++		printf("scandir() error: Does " NAMED_CONF "/import exist?\n");
  		Footer_ism3();
  	}
  	else if(n==2)
