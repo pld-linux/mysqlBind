@@ -1,7 +1,7 @@
 Summary:	An ISP quality, browser-based DNS/BIND name server manager
 Name:		mysqlBind
 Version:	1.8
-Release:	0.5
+Release:	0.6
 License:	GPL v2
 Group:		Networking/Admin
 Source0:	http://openisp.net/%{name}/%{name}%{version}.tar.gz
@@ -15,8 +15,9 @@ BuildRequires:	mysql-devel
 #Requires(pre,post):	-
 #Requires(preun):	-
 #Requires(postun):	-
+Requires:	apache-mod_ss;
+Requires:	bind-utils
 Requires:	mysql
-Requires:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_appdir %{_libdir}/%{name}
@@ -60,13 +61,24 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
-
 %post
-
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*mysqlBind.conf" /etc/httpd/httpd.conf; then
+	echo "Include /etc/httpd/mysqlBind.conf" >> /etc/httpd/httpd.conf
+fi
+if [ -f /var/lock/subsys/httpd ]; then
+	/usr/sbin/apachectl restart 1>&2
+fi
+		
 %preun
-
-%postun
+if [ "$1" = "0" ]; then
+	umask 027
+	grep -v "^Include.*mysqlBind.conf" /etc/httpd/httpd.conf > \
+		/etc/httpd/httpd.conf.tmp
+	mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/usr/sbin/apachectl restart 1>&2
+	fi
+fi
 
 %files
 %defattr(644,root,root,755)
