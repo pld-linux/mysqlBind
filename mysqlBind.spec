@@ -9,6 +9,7 @@ Source0:	http://openisp.net/%{name}/%{name}%{version}.tar.gz
 Source1:	%{name}.conf
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-mysql_user.patch
+Patch2:		%{name}-paths.patch
 URL:		http://openisp.net/mysqlBind/
 BuildRequires:	mysql-devel
 #PreReq:		-
@@ -41,6 +42,7 @@ ownership. It is also compatible with mysqlISP.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__make} \
@@ -48,12 +50,12 @@ ownership. It is also compatible with mysqlISP.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir}/data,/etc/httpd}
+install -d $RPM_BUILD_ROOT{/etc/httpd,%{_appdir},/var/lib/%{name}/data}
 
 %{__make} install \
 	CGIDIR=$RPM_BUILD_ROOT%{_appdir}/
 
-install data/* $RPM_BUILD_ROOT%{_appdir}/data
+install data/* $RPM_BUILD_ROOT/var/lib/%{name}/data
 install docs/tutorial.html $RPM_BUILD_ROOT%{_appdir}/mysqlbind.tutorial.txt
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd
@@ -87,4 +89,4 @@ fi
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/*.cgi
 %{_appdir}/*.txt
-%{_appdir}/data
+/var/lib/%{name}/data
