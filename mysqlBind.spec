@@ -1,4 +1,5 @@
 Summary:	An ISP quality, browser-based DNS/BIND name server manager
+Summary(pl):	Oparty na przegl±darce zarz±dca serwerów DNS/BIND wystarczaj±cy dla ISP
 Name:		mysqlBind
 Version:	1.8
 Release:	0.6
@@ -12,11 +13,7 @@ Patch1:		%{name}-mysql_user.patch
 Patch2:		%{name}-paths.patch
 URL:		http://openisp.net/mysqlBind/
 BuildRequires:	mysql-devel
-#PreReq:		-
-#Requires(pre,post):	-
-#Requires(preun):	-
-#Requires(postun):	-
-Requires:	apache-mod_ss;
+Requires:	apache-mod_ssl
 Requires:	bind-utils
 Requires:	mysql
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -24,19 +21,37 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_appdir %{_libdir}/%{name}
 
 %description
-myqslBind manages multiple DNS/BIND (8 and 9) name servers. It automates
+mysqlBind manages multiple DNS/BIND (8 and 9) name servers. It automates
 updates to multiple DNS servers, centralizes and stores all zone and
 resource records for sets of related name servers
 (ns0...nsN.yourisp.net), and even manages different name server sets
 from a single browser-based interface. Unlimited master and slave name
 servers update their zone information via a job queue system that uses
-MySQL socket connections. Advanced operations can use mySQL replication
+MySQL socket connections. Advanced operations can use MySQL replication
 clusters for high availability and redundancy. Large ISPs and other
 organizations should note that they can easily add SQL functions to
 customize the program for their special needs. It supports
 authentication via SSL Unix password login, SSL personal certificate, or
 IP-based access with multiple permission levels and individual record
 ownership. It is also compatible with mysqlISP.
+
+%description -l pl
+mysqlBind zarz±dza wieloma serwerami nazw DNS/BIND (8 i 9).
+Automatyzuje uaktualnienia wielu serwerów DNS, centralizuje i
+przechowuje wszystkie rekordy stref i zasobów dla zbiorów powi±zanych
+serwerów nazw (ns0...nsN.twojisp.net), a nawet zarz±dza ró¿nymi
+zbiorami serwerów nazw z jednego interfejsu opartego na przegl±darce.
+Nieograniczona liczba serwerów g³ównych i zapasowych uaktualnia swoje
+informacje o strefach poprzez system kolejkowania zadañ u¿ywaj±cy
+po³±czeñ przez gniazda MySQL. Zaawansowane operacje mog± u¿ywaæ
+klastrów replikacyjnych MySQL-a dla wysokiej dostêpno¶ci i
+redundancji. Duzi ISP i inne organizacje powinni zauwa¿yæ, jak ³atwo
+mo¿na dodaæ funkcje SQL aby dostosowaæ program do w³asnych,
+specjalnych potrzeb. Program obs³uguje uwierzytelnienie przez
+logowanie has³em po SSL, certyfikat osobisty SSL lub dostêp oparty o
+IP z wieloma stopniami uprawnieñ i indywidualn± w³asno¶ci± rekordów.
+Jest tak¿e kompatybilny z mysqlISP.
+
 
 %prep
 %setup -q -n %{name}
@@ -89,4 +104,5 @@ fi
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/*.cgi
 %{_appdir}/*.txt
+%dir /var/lib/%{name}
 /var/lib/%{name}/data
