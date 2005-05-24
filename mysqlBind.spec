@@ -5,7 +5,7 @@ Version:	1.8
 Release:	0.9
 License:	GPL v2
 Group:		Networking/Admin
-Source0:	http://openisp.net/%{name}/%{name}%{version}.tar.gz
+Source0:	http://openisp.net/mysqlBind/%{name}%{version}.tar.gz
 # Source0-md5:	1b360bdc74bf4d21998256fa09d45af7
 Source1:	%{name}.conf
 Patch0:		%{name}-makefile.patch
@@ -71,7 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd,%{_appdir}/{data,setup9}} \
 
 %{__make} install \
-	CGIDIR=$RPM_BUILD_ROOT%{_appdir}/
+	CGIDIR=$RPM_BUILD_ROOT%{_appdir}
 
 install data/* $RPM_BUILD_ROOT%{_appdir}/data
 install setup9/* $RPM_BUILD_ROOT%{_appdir}/setup9
@@ -109,7 +109,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc CHANGES INSTALL
-%config(noreplace) %verify(not md5 size mtime) /etc/httpd/%{name}.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/httpd/%{name}.conf
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/*.cgi
 %{_appdir}/*.txt
