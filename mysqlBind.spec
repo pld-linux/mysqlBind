@@ -12,6 +12,7 @@ Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-paths.patch
 URL:		http://openisp.net/mysqlBind/
 BuildRequires:	mysql-devel
+Requires:	apache >= 2.0
 Requires:	apache-mod_ssl
 Requires:	bind
 Requires:	bind-utils
