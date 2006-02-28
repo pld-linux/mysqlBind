@@ -95,7 +95,7 @@ fi
 if [ -f /var/lock/subsys/httpd ]; then
 	/usr/sbin/apachectl restart 1>&2
 fi
-		
+
 %preun
 if [ "$1" = "0" ]; then
 	umask 027
