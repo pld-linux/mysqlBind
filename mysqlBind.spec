@@ -1,15 +1,16 @@
 Summary:	An ISP quality, browser-based DNS/BIND name server manager
 Summary(pl):	Oparty na przegl±darce rozbudowany zarz±dca serwerów DNS/BIND
 Name:		mysqlBind
-Version:	1.8
-Release:	0.9
+Version:	1.94
+Release:	0.5
 License:	GPL v2
 Group:		Networking/Admin
 Source0:	http://openisp.net/mysqlBind/%{name}%{version}.tar.gz
-# Source0-md5:	1b360bdc74bf4d21998256fa09d45af7
+# Source0-md5:	aea27dd7a641d6c4d9d68e216e8650fb
 Source1:	%{name}.conf
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-paths.patch
+Patch2:		%{name}-CC.patch
 URL:		http://openisp.net/mysqlBind/
 BuildRequires:	mysql-devel
 Requires:	apache >= 2.0
@@ -54,9 +55,10 @@ IP z wieloma stopniami uprawnieñ i indywidualn± w³asno¶ci± rekordów.
 Jest tak¿e kompatybilny z mysqlISP.
 
 %prep
-%setup -q -n %{name}
+%setup -q -n %{name}%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 echo '
@@ -65,6 +67,7 @@ echo '
 ' >> local.h
 
 %{__make} \
+	CC="%{__cc}" \
 	CFLAGS="-Wall -DLinux %{rpmcflags}"
 
 %install
@@ -72,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd,%{_appdir}/{data,setup9}} \
 
 %{__make} install \
-	CGIDIR=$RPM_BUILD_ROOT%{_appdir}
+	CGIDIR=$RPM_BUILD_ROOT%{_appdir}/
 
 install data/* $RPM_BUILD_ROOT%{_appdir}/data
 install setup9/* $RPM_BUILD_ROOT%{_appdir}/setup9
