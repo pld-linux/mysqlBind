@@ -1,0 +1,73 @@
+--- ./makefile.org	2006-09-29 08:52:55.000000000 +0000
++++ ./makefile	2006-09-29 08:54:57.000000000 +0000
+@@ -31,6 +31,7 @@
+ #CFLAGS=-O DFreeBSD -DLinux -Wall
+ CFLAGS= -DLinux -Wall
+ RELEASE = 1.94
++CC = cc
+ 
+ #FreeBSD make support un comment the next two lines. Yes you need both -D and the gmake
+ #define. Also check mysqlrad.h for FreeBSD parts and adjust for your system.
+@@ -53,49 +54,49 @@
+ all: mysqlBind.cgi
+ 
+ mysqlBind.cgi: tzone.o tresource.o trrtype.o tjob.o tnameserver.o tmailserver.o tconfiguration.o tclient.o tauthorize.o bind.o main.o cgi.o 
+-	cc tzone.o tresource.o trrtype.o tjob.o tnameserver.o tmailserver.o tconfiguration.o tclient.o tauthorize.o bind.o main.o cgi.o -o mysqlBind.cgi $(LIBS)
++	$(CC) tzone.o tresource.o trrtype.o tjob.o tnameserver.o tmailserver.o tconfiguration.o tclient.o tauthorize.o bind.o main.o cgi.o -o mysqlBind.cgi $(LIBS)
+ 
+ #Note use -lmsql if so defined in local.h
+ #-lmsql
+ 
+ tzone.o: tzone.c mysqlrad.h language.h tzonefunc.h
+-	cc -c tzone.c -o tzone.o $(CFLAGS)
++	$(CC) -c tzone.c -o tzone.o $(CFLAGS)
+ 
+ tresource.o: tresource.c mysqlrad.h language.h tresourcefunc.h
+-	cc -c tresource.c -o tresource.o $(CFLAGS)
++	$(CC) -c tresource.c -o tresource.o $(CFLAGS)
+ 
+ trrtype.o: trrtype.c mysqlrad.h language.h trrtypefunc.h
+-	cc -c trrtype.c -o trrtype.o $(CFLAGS)
++	$(CC) -c trrtype.c -o trrtype.o $(CFLAGS)
+ 
+ tjob.o: tjob.c mysqlrad.h language.h tjobfunc.h
+-	cc -c tjob.c -o tjob.o $(CFLAGS)
++	$(CC) -c tjob.c -o tjob.o $(CFLAGS)
+ 
+ tnameserver.o: tnameserver.c mysqlrad.h language.h tnameserverfunc.h
+-	cc -c tnameserver.c -o tnameserver.o $(CFLAGS)
++	$(CC) -c tnameserver.c -o tnameserver.o $(CFLAGS)
+ 
+ tmailserver.o: tmailserver.c mysqlrad.h language.h tmailserverfunc.h
+-	cc -c tmailserver.c -o tmailserver.o $(CFLAGS)
++	$(CC) -c tmailserver.c -o tmailserver.o $(CFLAGS)
+ 
+ tconfiguration.o: tconfiguration.c mysqlrad.h language.h tconfigurationfunc.h
+-	cc -c tconfiguration.c -o tconfiguration.o $(CFLAGS)
++	$(CC) -c tconfiguration.c -o tconfiguration.o $(CFLAGS)
+ 
+ tclient.o: tclient.c mysqlrad.h language.h tclientfunc.h
+-	cc -c tclient.c -o tclient.o $(CFLAGS)
++	$(CC) -c tclient.c -o tclient.o $(CFLAGS)
+ 
+ tauthorize.o: tauthorize.c mysqlrad.h language.h tauthorizefunc.h
+-	cc -c tauthorize.c -o tauthorize.o $(CFLAGS)
++	$(CC) -c tauthorize.c -o tauthorize.o $(CFLAGS)
+ 
+ 
+ main.o: main.c mysqlrad.h mainfunc.h language.h local.h
+-	cc -c main.c -o main.o $(CFLAGS)
++	$(CC) -c main.c -o main.o $(CFLAGS)
+ 
+ cgi.o: cgi.h cgi.c
+-	cc -c cgi.c -o cgi.o $(CFLAGS)
++	$(CC) -c cgi.c -o cgi.o $(CFLAGS)
+ 
+ #List: bind.o
+ #Extra Link Command: -lmsql
+ bind.o: bind.c mysqlrad.h
+-	cc -c bind.c -o bind.o $(CFLAGS)
++	$(CC) -c bind.c -o bind.o $(CFLAGS)
+ 
+ clean:
+ 	rm -f *.o

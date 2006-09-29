@@ -1,19 +1,22 @@
---- mysqlBind/makefile.orig	Thu Feb 26 11:25:32 2004
-+++ mysqlBind/makefile	Thu Feb 26 11:26:07 2004
-@@ -38,7 +38,7 @@
- ifdef FreeBSD
+--- ./makefile.org	2006-09-11 14:50:45.000000000 +0000
++++ ./makefile	2006-09-29 08:40:26.000000000 +0000
+@@ -43,9 +43,9 @@
  	LIBS= /usr/local/lib/mysql/libmysqlclient.a -lz -lm /usr/lib/libcrypt.a
  else
--	LIBS= /usr/lib/mysql/libmysqlclient.a -lz -lcrypt -lm
-+	LIBS= -lmysqlclient -lz -lcrypt -lm
+ 	ifdef SSL
+-		LIBS= /usr/lib/mysql/libmysqlclient.a -lz -lcrypt -lm -lssl
++		LIBS= -lmysqlclient -lz -lcrypt -lm -lssl
+ 	else
+-		LIBS= /usr/lib/mysql/libmysqlclient.a -lz -lcrypt -lm
++		LIBS= -lmysqlclient -lz -lcrypt -lm
+ 	endif
  endif
  
+@@ -54,7 +54,6 @@
  
-@@ -49,7 +49,6 @@
- 	cc tzone.o tresource.o trrtype.o tjob.o tnameserver.o tmailserver.o tconfiguration.o tclient.o tauthorize.o \
- 	bind.o\
- 	 main.o cgi.o -o mysqlBind.cgi $(LIBS)
--	mail -s mysqlBind$(RELEASE) support@openisp.net < /dev/null > /dev/null 2>&1
+ mysqlBind.cgi: tzone.o tresource.o trrtype.o tjob.o tnameserver.o tmailserver.o tconfiguration.o tclient.o tauthorize.o bind.o main.o cgi.o 
+ 	cc tzone.o tresource.o trrtype.o tjob.o tnameserver.o tmailserver.o tconfiguration.o tclient.o tauthorize.o bind.o main.o cgi.o -o mysqlBind.cgi $(LIBS)
+-#	mail -s "mysqlBind$(RELEASE) `uname -n -s`" support@openisp.net < /dev/null > /dev/null 2>&1
  
  #Note use -lmsql if so defined in local.h
  #-lmsql
