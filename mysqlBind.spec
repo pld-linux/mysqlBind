@@ -1,5 +1,5 @@
 Summary:	An ISP quality, browser-based DNS/BIND name server manager
-Summary(pl):	Oparty na przegl±darce rozbudowany zarz±dca serwerów DNS/BIND
+Summary(pl.UTF-8):   Oparty na przeglÄ…darce rozbudowany zarzÄ…dca serwerÃ³w DNS/BIND
 Name:		mysqlBind
 Version:	1.94
 Release:	0.5
@@ -37,22 +37,22 @@ authentication via SSL Unix password login, SSL personal certificate, or
 IP-based access with multiple permission levels and individual record
 ownership. It is also compatible with mysqlISP.
 
-%description -l pl
-mysqlBind zarz±dza wieloma serwerami nazw DNS/BIND (8 i 9).
-Automatyzuje uaktualnienia wielu serwerów DNS, centralizuje i
-przechowuje wszystkie rekordy stref i zasobów dla zbiorów powi±zanych
-serwerów nazw (ns0...nsN.twojisp.net), a nawet zarz±dza ró¿nymi
-zbiorami serwerów nazw z jednego interfejsu opartego na przegl±darce.
-Nieograniczona liczba serwerów g³ównych i zapasowych uaktualnia swoje
-informacje o strefach poprzez system kolejkowania zadañ u¿ywaj±cy
-po³±czeñ przez gniazda MySQL. Zaawansowane operacje mog± u¿ywaæ
-klastrów replikacyjnych MySQL-a dla wysokiej dostêpno¶ci i
-redundancji. Duzi ISP i inne organizacje powinni zauwa¿yæ, jak ³atwo
-mo¿na dodaæ funkcje SQL aby dostosowaæ program do w³asnych,
-specjalnych potrzeb. Program obs³uguje uwierzytelnienie przez
-logowanie has³em po SSL, certyfikat osobisty SSL lub dostêp oparty o
-IP z wieloma stopniami uprawnieñ i indywidualn± w³asno¶ci± rekordów.
-Jest tak¿e kompatybilny z mysqlISP.
+%description -l pl.UTF-8
+mysqlBind zarzÄ…dza wieloma serwerami nazw DNS/BIND (8 i 9).
+Automatyzuje uaktualnienia wielu serwerÃ³w DNS, centralizuje i
+przechowuje wszystkie rekordy stref i zasobÃ³w dla zbiorÃ³w powiÄ…zanych
+serwerÃ³w nazw (ns0...nsN.twojisp.net), a nawet zarzÄ…dza rÃ³Å¼nymi
+zbiorami serwerÃ³w nazw z jednego interfejsu opartego na przeglÄ…darce.
+Nieograniczona liczba serwerÃ³w gÅ‚Ã³wnych i zapasowych uaktualnia swoje
+informacje o strefach poprzez system kolejkowania zadaÅ„ uÅ¼ywajÄ…cy
+poÅ‚Ä…czeÅ„ przez gniazda MySQL. Zaawansowane operacje mogÄ… uÅ¼ywaÄ‡
+klastrÃ³w replikacyjnych MySQL-a dla wysokiej dostÄ™pnoÅ›ci i
+redundancji. Duzi ISP i inne organizacje powinni zauwaÅ¼yÄ‡, jak Å‚atwo
+moÅ¼na dodaÄ‡ funkcje SQL aby dostosowaÄ‡ program do wÅ‚asnych,
+specjalnych potrzeb. Program obsÅ‚uguje uwierzytelnienie przez
+logowanie hasÅ‚em po SSL, certyfikat osobisty SSL lub dostÄ™p oparty o
+IP z wieloma stopniami uprawnieÅ„ i indywidualnÄ… wÅ‚asnoÅ›ciÄ… rekordÃ³w.
+Jest takÅ¼e kompatybilny z mysqlISP.
 
 %prep
 %setup -q -n %{name}%{version}
