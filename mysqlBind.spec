@@ -1,5 +1,5 @@
 Summary:	An ISP quality, browser-based DNS/BIND name server manager
-Summary(pl.UTF-8):   Oparty na przeglądarce rozbudowany zarządca serwerów DNS/BIND
+Summary(pl.UTF-8):	Oparty na przeglądarce rozbudowany zarządca serwerów DNS/BIND
 Name:		mysqlBind
 Version:	1.94
 Release:	0.5
